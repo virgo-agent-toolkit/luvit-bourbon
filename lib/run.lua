@@ -5,7 +5,7 @@ local math = require 'math'
 
 local fmt = string.format
 
-local checked = 0
+local context = require './context'
 
 function is_test_key(k)
   return type(k) == "string" and k:match("_*test.*")
@@ -25,31 +25,35 @@ local function get_tests(mod)
   return ts
 end
 
-local run_test = function(runner, callback)
+local run_test = function(runner, stats, callback)
   p (fmt("Running %s", runner.name))
 
   local test_baton = {}
   test_baton.done = function()
+    stats:add_stats(runner.context)
+    runner.context:print_summary()
     callback()
   end
-  runner.func(test_baton, asserts)
+  runner.context:run(runner.func, test_baton)
 end
 
 local run = function(mods)
   local runners = {}
+  local stats = context.new()
 
   for k, v in pairs(get_tests(mods)) do
-    table.insert(runners, 1, { name = k, func = v })
+    table.insert(runners, 1, { name = k, func = v, context = context.new() })
   end
 
   async.forEachSeries(runners, function(runner, callback)
-    run_test(runner, callback)
+    run_test(runner, stats, callback)
   end, function(err)
     if err then
       p(err)
       return
     end
-    p(fmt("Executed %s asserts", checked))
+    p(fmt("Totals"))
+    stats:print_summary()
   end)
 end
 
