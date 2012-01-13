@@ -26,4 +26,4 @@ Hacking
 License
 =======
 
-Apache 2.0, for more info see [LICENSE](/racker/bourbon/blob/master/LICENSE).
+Apache 2.0, for more info see [LICENSE](/racker/lua-bourbon/blob/master/LICENSE).
