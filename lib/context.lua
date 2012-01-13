@@ -27,11 +27,11 @@ function Context.prototype:run(func, test)
 
   local newgt = {}
   setmetatable(newgt, {__index = _G})
-  newgt.asserts = require('./asserts')
-  newgt.asserts.assert = bourbon_assert
+  local asserts = require('./asserts')
+  asserts.assert = bourbon_assert
 
   setfenv(func, newgt)
-  ok, ret_or_err = pcall(func, test)
+  ok, ret_or_err = pcall(func, test, asserts)
   if ok then
     return ret_or_err
   else
