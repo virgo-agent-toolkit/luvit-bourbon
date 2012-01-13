@@ -23,6 +23,11 @@ Hacking
 
     ./test.lua
 
+#### TODO
+
+ * Check the test context for leaking global variables
+ * Better reporting, just follow Whiskey I would say
+
 License
 =======
 
