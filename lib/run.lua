@@ -39,7 +39,7 @@ function TestBaton.new(runner, stats, callback)
   local tb = {}
   tb._callback = callback
   tb._stats = stats
-  tb._runenr = runner
+  tb._runner = runner
   tb.done = function()
     stats:add_stats(runner.context)
     callback()
