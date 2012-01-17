@@ -50,18 +50,23 @@ end
 
 
 local run_test = function(runner, stats, callback)
-  process.stdout:write(fmt("Running %s\n", runner.name))
+  process.stdout:write(fmt("Running %s", runner.name))
   local test_baton = TestBaton.new(runner, stats, function(err)
-    process.stdout:write(fmt("Finished running %s\n", runner.name))
+    process.stdout:write(" DONE\n")
     callback(err)
   end)
   runner.context:run(runner.func, test_baton)
 end
 
-local run = function(mods)
+local run = function(options, mods, callback)
   local runners = {}
   local ops = {}
   local stats = context.new()
+
+  options = options or {
+    print_summary = true,
+    verbose = true
+  }
 
   for k, v in pairs(get_tests(mods)) do
     if not is_control_function(k) then
@@ -102,8 +107,12 @@ local run = function(mods)
       process.stdout:write(err .. '\n')
       return
     end
-    process.stdout:write('Totals' .. '\n')
-    stats:print_summary()
+    if options.print_summary then
+      process.stdout:write('\nTotals' .. '\n')
+      stats:print_summary()
+    end
+
+    if callback then callback(nil, stats) end
   end)
 end
 
