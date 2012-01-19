@@ -12,4 +12,9 @@ exports['test_asserts_equal'] = function(test, asserts)
   test.done()
 end
 
+exports['test_asserts_nil'] = function(test, asserts)
+  asserts.is_nil(nil)
+  test.done()
+end
+
 return exports

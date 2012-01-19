@@ -20,5 +20,8 @@ end
 asserts.not_nil = function(a)
   asserts.assert(a ~= nil)
 end
+asserts.is_nil = function(a)
+  asserts.assert(a == nil)
+end
 
 return asserts
