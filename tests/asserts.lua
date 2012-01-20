@@ -7,8 +7,13 @@ exports['test_asserts_ok'] = function(test, asserts)
   test.done()
 end
 
-exports['test_asserts_equal'] = function(test, asserts)
+exports['test_asserts_equals'] = function(test, asserts)
   asserts.equals(1, 1)
+  test.done()
+end
+
+exports['test_asserts_dequals'] = function(test, asserts)
+  asserts.dequals({1,2,3, foo = 'foo', bar = { 'baz' }}, {bar = { 'baz' }, 1,2,3, foo = 'foo'})
   test.done()
 end
 
