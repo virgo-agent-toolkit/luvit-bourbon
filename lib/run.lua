@@ -20,6 +20,7 @@ end
 
 local function get_tests(mod)
   local ts = {}
+  if not mod then return ts end
   for k,v in pairs(mod) do
     if is_test_key(k) and type(v) == "function" then
       ts[k] = v
@@ -59,6 +60,7 @@ local run_test = function(runner, stats, callback)
 end
 
 local run = function(options, mods, callback)
+  if not mods then return end
   local runners = {}
   local ops = {}
   local stats = context.new()
