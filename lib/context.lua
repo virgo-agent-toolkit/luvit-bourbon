@@ -11,7 +11,7 @@ function Context.prototype:run(func, test)
 
     if ok then
       self.passed = self.passed + 1
-      return ok
+      return ok, ret_or_err
     else
       self.failed = self.failed + 1
 
@@ -21,7 +21,7 @@ function Context.prototype:run(func, test)
       info.traceback = debug.traceback()
       table.insert(self.errors, info)
 
-      return ok
+      return ok, ret_or_err
     end
   end
 

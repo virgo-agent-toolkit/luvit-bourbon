@@ -43,4 +43,42 @@ asserts.is_nil = function(a)
   asserts.assert(a == nil)
 end
 
+asserts.is_number = function(a)
+  asserts.assert(type(a) == 'number')
+end
+
+asserts.is_boolean = function(a)
+  asserts.assert(type(a) == 'boolean')
+end
+
+asserts.is_string = function(a)
+  asserts.assert(type(a) == 'string')
+end
+
+asserts.is_table = function(a)
+  asserts.assert(type(a) == 'table')
+end
+
+asserts.is_array = function(a)
+  asserts.assert(type(a) == 'table')
+  for k, v in pairs(a) do
+    asserts.assert(false)
+  end
+end
+
+asserts.is_hash = function(a)
+  asserts.assert(type(a) == 'table')
+  for k, v in ipairs(a) do
+    asserts.assert(false)
+  end
+end
+
+asserts.throws = function(...)
+  local s, e = pcall(...)
+  p('NOT?', s, e)
+  asserts.assert(not s)
+  asserts.assert(e)
+end
+
+
 return asserts
