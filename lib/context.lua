@@ -36,8 +36,8 @@ function Context.prototype:run(func, test)
       -- TODO: strip traceback level
       info.traceback = debug.traceback()
       table.insert(self.errors, info)
-
-      return ok, ret_or_err
+      test.done()
+      error(ret_or_err)
     end
   end
 
@@ -48,11 +48,7 @@ function Context.prototype:run(func, test)
 
   setfenv(func, newgt)
   ok, ret_or_err = pcall(func, test, asserts)
-  if ok then
-    return ret_or_err
-  else
-    error(ret_or_err)
-  end
+  return ret_or_err
 end
 
 function Context.prototype:add_stats(c)
@@ -64,10 +60,18 @@ end
 
 function Context.prototype:print_summary()
   print("checked: " .. self.checked .. " failed: " .. self.failed .. " passed: " .. self.passed)
+  self:print_errors()
+end
+
+function Context.prototype:print_errors()
+  self:dump_errors(print)
+end
+
+function Context.prototype:dump_errors(func)
   for i, v in ipairs(self.errors) do
-    print("Error #" .. i)
-    print("\t" .. v.ret)
-    print("\t" .. v.traceback)
+    func("Error #" .. i)
+    func("\t" .. v.ret)
+    func("\t" .. v.traceback)
   end
 end
 

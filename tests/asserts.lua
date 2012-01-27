@@ -40,7 +40,7 @@ end
 
 exports['test_asserts_not_nil'] = function(test, asserts)
   asserts.not_nil(1)
-  asserts.throws(asserts.not_nil, nil)
+  asserts.throws(error, "foobar")
   test.done()
 end
 

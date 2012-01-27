@@ -91,7 +91,6 @@ end
 
 asserts.throws = function(...)
   local s, e = pcall(...)
-  p('NOT?', s, e)
   asserts.assert(not s)
   asserts.assert(e)
 end

@@ -70,6 +70,11 @@ local run_test = function(runner, stats, callback)
   process.stdout:write(fmt("Running %s", runner.name))
   local test_baton = TestBaton.new(runner, stats, function(err)
     process.stdout:write(" DONE\n")
+
+    runner.context:dump_errors(function(line)
+      process.stdout:write(line)
+    end)
+
     callback(err)
   end)
   runner.context:run(runner.func, test_baton)
