@@ -124,7 +124,10 @@ local run = function(options, mods, callback)
   end
 
   async.forEachSeries(ops, function(fun, callback)
-    fun(callback)
+    local status, err = pcall(fun, callback)
+    if status ~= true then
+      callback(err)
+    end
   end, function(err)
     if err then
       process.stdout:write(err .. '\n')
