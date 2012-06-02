@@ -23,8 +23,6 @@ local async = require('async')
 
 local fmt = require('string').format
 
-local TEST_PATH = './tests'
-
 local function runit(filename, callback)
   local modname = Path.join(process.cwd(), TEST_PATH, filename)
   process.stdout:write(fmt('Executing test module [%s]\n\n', modname))
@@ -42,7 +40,7 @@ function run()
     process.exit(1)
   end
 
-  fs.readdir(TEST_PATH, function(err, files)
+  fs.readdir(testsPath, function(err, files)
     if err then
       p(err)
       return
