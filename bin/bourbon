@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 --]]
 
-local FS = require('fs')
+local fs = require('fs')
 local Path = require('path')
 local bourbon = require(__dirname .. '/..')
 local async = require('async')
@@ -34,11 +34,21 @@ local function runit(filename, callback)
   end)
 end
 
-FS.readdir(TEST_PATH, function(err, files)
-  if err then
-    p(err)
-    return
-  end
-  async.forEachSeries(files, runit, function(err) end)
-end)
+function run()
+  local testsPath = process.argv[1]
 
+  if not testsPath then
+    print('Usage: bourbon <path to directory with tests>')
+    process.exit(1)
+  end
+
+  fs.readdir(TEST_PATH, function(err, files)
+    if err then
+      p(err)
+      return
+    end
+    async.forEachSeries(files, runit, function(err) end)
+  end)
+end
+
+run()
