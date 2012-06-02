@@ -49,7 +49,10 @@ function run()
 
     async.forEachSeries(files, function(file, callback)
       local filePath = Path.join(testsPath, file)
-      runit(filePath, callback)
+
+      if file:find('.lua') then
+        runit(filePath, callback)
+      end
     end, function(err) end)
   end)
 end
