@@ -23,10 +23,9 @@ local async = require('async')
 
 local fmt = require('string').format
 
-local function runit(filename, callback)
-  local modname = Path.join(process.cwd(), TEST_PATH, filename)
-  process.stdout:write(fmt('Executing test module [%s]\n\n', modname))
-  bourbon.run(nil, require(modname), function(err)
+local function runit(filePath, callback)
+  process.stdout:write(fmt('Executing test module [%s]\n\n', filePath))
+  bourbon.run(nil, require(filePath), function(err)
     process.stdout:write('\n')
     callback()
   end)
@@ -40,12 +39,18 @@ function run()
     process.exit(1)
   end
 
+  testsPath = Path.resolve(process.cwd(), testsPath)
+
   fs.readdir(testsPath, function(err, files)
     if err then
       p(err)
       return
     end
-    async.forEachSeries(files, runit, function(err) end)
+
+    async.forEachSeries(files, function(file, callback)
+      local filePath = Path.join(testsPath, file)
+      runit(filePath, callback)
+    end, function(err) end)
   end)
 end
 
