@@ -18,16 +18,32 @@ limitations under the License.
 
 local fs = require('fs')
 local Path = require('path')
-local bourbon = require(__dirname .. '/..')
-local async = require('async')
-
+local debugm = require('debug')
 local fmt = require('string').format
 
+local async = require('async')
+local bourbon = require(__dirname .. '/..')
+
+local failed = 0
+
 local function runit(filePath, callback)
-  process.stdout:write(fmt('Executing test module [%s]\n\n', filePath))
-  bourbon.run(nil, require(filePath), function(err)
-    process.stdout:write('\n')
+  local status, mod = pcall(require, filePath)
+
+  if status ~= true then
+    process.stdout:write(fmt('Error loading test module [%s]: %s\n\n', filePath, mod))
     callback()
+    return
+  end
+
+  process.stdout:write(fmt('Executing test module [%s]\n\n', filePath))
+  bourbon.run(nil, mod, function(err, stats)
+    process.stdout:write('\n')
+
+    if stats then
+      failed = failed + stats.failed
+    end
+
+    callback(err)
   end)
 end
 
@@ -38,6 +54,10 @@ function run()
     print('Usage: bourbon <path to directory with tests>')
     process.exit(1)
   end
+
+  -- set the exitCode to error in case we trigger some
+  -- bug that causes us to exit the loop early
+  process.exitCode = 1
 
   testsPath = Path.resolve(process.cwd(), testsPath)
 
@@ -53,7 +73,17 @@ function run()
       if file:find('.lua') then
         runit(filePath, callback)
       end
-    end, function(err) end)
+    end,
+
+    function(err)
+      if err then
+        p(err)
+        debugm.traceback(err)
+      end
+
+      process.exitCode = 0
+      process.exit(failed)
+    end)
   end)
 end
 
