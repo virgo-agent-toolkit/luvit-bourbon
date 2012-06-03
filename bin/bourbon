@@ -17,6 +17,7 @@ limitations under the License.
 --]]
 
 local fs = require('fs')
+local table = require('table')
 local Path = require('path')
 local debugm = require('debug')
 local fmt = require('string').format
@@ -24,7 +25,7 @@ local fmt = require('string').format
 local options = require('options')
 local async = require('async')
 local bourbon = require(__dirname .. '/..')
-local runTestFile = require(__dirname .. '/../lib/runner').runTestFile
+local runTestFiles = require(__dirname .. '/../lib/runner').runTestFiles
 
 local argv = options
   .usage('Usage: ./bourbon -p <path to tests directory>')
@@ -44,37 +45,26 @@ function run()
   testsPath = Path.resolve(process.cwd(), testsPath)
 
   fs.readdir(testsPath, function(err, files)
+    local paths = {}, file
+
     if err then
       p(err)
       return
     end
 
-    async.forEachSeries(files, function(file, callback)
-      local filePath = Path.join(testsPath, file)
+    for i=1, #files do
+      file = files[i]
 
       if file:find('.lua') then
-        runTestFile(filePath, function(err, stats)
-          if err then
-            callback(err)
-            return
-          end
-
-          if stats then
-            failed = failed + stats.failed
-          end
-
-          callback()
-        end)
+        table.insert(paths, Path.join(testsPath, file))
       end
-    end,
+    end
 
-    function(err)
+    runTestFiles(paths, {}, function(err, failed)
       if err then
-        p(err)
-        debugm.traceback(err)
+        process.exit(1)
       end
 
-      process.exitCode = 0
       process.exit(failed)
     end)
   end)

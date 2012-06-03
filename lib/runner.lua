@@ -16,11 +16,14 @@ limitations under the License.
 
 local fmt = require('string').format
 
+local async = require('async')
+
 local run = require('./run')
 
 local exports = {}
 
-local function runTestFile(filePath, callback)
+function runTestFile(filePath, callback)
+  print(filePath)
   local status, mod = pcall(require, filePath)
 
   if status ~= true then
@@ -36,5 +39,34 @@ local function runTestFile(filePath, callback)
   end)
 end
 
+function runTestFiles(testFiles, options, callback)
+  local failed = 0
+
+  async.forEachSeries(testFiles, function(testFile, callback)
+    runTestFile(testFile, function(err, stats)
+      if err then
+        callback(err)
+        return
+      end
+
+      if stats then
+        failed = failed + stats.failed
+      end
+
+      callback()
+    end)
+  end,
+
+  function(err)
+    if err then
+      p(err)
+      debugm.traceback(err)
+    end
+
+    callback(err, failed)
+  end)
+end
+
 exports.runTestFile = runTestFile
+exports.runTestFiles = runTestFiles
 return exports
