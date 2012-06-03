@@ -28,7 +28,7 @@ function runTestFile(filePath, callback)
 
   if status ~= true then
     process.stdout:write(fmt('Error loading test module [%s]: %s\n\n', filePath, mod))
-    callback()
+    callback(err)
     return
   end
 
