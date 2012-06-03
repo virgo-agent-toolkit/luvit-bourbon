@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 --]]
 
-local bourbon = require(__dirname .. '/..')
-
 local fmt = require('string').format
+
+local run = require('./run')
 
 local exports = {}
 
@@ -30,7 +30,7 @@ local function runTestFile(filePath, callback)
   end
 
   process.stdout:write(fmt('Executing test module [%s]\n\n', filePath))
-  bourbon.run(nil, mod, function(err, stats)
+  run(nil, mod, function(err, stats)
     process.stdout:write('\n')
     callback(err, stats)
   end)
