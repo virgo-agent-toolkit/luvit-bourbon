@@ -21,8 +21,16 @@ local Path = require('path')
 local debugm = require('debug')
 local fmt = require('string').format
 
+local options = require('options')
 local async = require('async')
 local bourbon = require(__dirname .. '/..')
+
+local argv = options
+  .usage('Usage: ./bourbon -p <path to tests directory>')
+  .describe('p', 'path to the tests directory')
+  .alias ({p='path'})
+  .demand({'p'})
+  .argv("p:")
 
 local failed = 0
 
@@ -48,12 +56,7 @@ local function runit(filePath, callback)
 end
 
 function run()
-  local testsPath = process.argv[1]
-
-  if not testsPath then
-    print('Usage: bourbon <path to directory with tests>')
-    process.exit(1)
-  end
+  local testsPath = argv.args.p
 
   -- set the exitCode to error in case we trigger some
   -- bug that causes us to exit the loop early
