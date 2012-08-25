@@ -17,6 +17,11 @@ This is a test runner for luvit inspired by whiskey. A basic testing file looks 
 
     return exports
 
+Usage
+=====
+#### Running the tests with the commaond line tool
+    ./bin/bourbon -p {tests_directory}
+
 Hacking
 =======
 #### Running the tests
@@ -27,7 +32,6 @@ Hacking
 
  * Check the test context for leaking global variables
  * Better reporting, just follow Whiskey I would say
- * Command Line Tool, to use in makefiles
 
 License
 =======
