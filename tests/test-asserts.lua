@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 --]]
 
-exports = {}
+local exports = {}
 
 exports['test_asserts_ok'] = function(test, asserts)
   asserts.ok(true)
