@@ -3,7 +3,7 @@ Bourbon - testing for luvit
 
 This is a test runner for luvit inspired by whiskey. A basic testing file looks something like this:
 
-    exports = {}
+    local exports = {}
 
     exports['test_asserts_ok'] = function(test)
       asserts.ok(true)
