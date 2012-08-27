@@ -3,4 +3,4 @@
 	url = https://github.com/racker/luvit-async.git
 [submodule "modules/options"]
 	path = modules/options
-	url = https://github.com/hnakamur/luvit-options.git
+	url = https://github.com/radare/luvit-options.git
