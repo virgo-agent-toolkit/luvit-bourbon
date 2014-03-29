@@ -8,7 +8,7 @@ return {
     "Vladimir Dronnikov <dronnikov@gmail.com>"
   },
   dependencies = {
-    ["async"] = "https://github.com/racker/lua-async/zipball/master",
+    ["async"] = "https://github.com/virgo-agent-toolkit/luvit-async/zipball/master",
     ["options"] = "https://github.com/radare/luvit-options/zipball/master",
   },
 }
