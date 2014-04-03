@@ -55,7 +55,7 @@ function run()
     for i=1, #files do
       file = files[i]
 
-      if file:find('.lua') then
+      if file:find('.lua$') then
         table.insert(paths, Path.join(testsPath, file))
       end
     end
