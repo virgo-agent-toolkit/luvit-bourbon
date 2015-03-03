@@ -1,6 +1,6 @@
 return {
-  name = "bourbon",
-  version = "0.1.0",
+  name = "virgo-agent-toolkit/bourbon",
+  version = "0.2.0",
   description = "test library",
   author = "Ryan Phillips <ryan.phillips@rackspace.com>",
   contributors = {
@@ -8,7 +8,12 @@ return {
     "Vladimir Dronnikov <dronnikov@gmail.com>"
   },
   dependencies = {
-    ["async"] = "https://github.com/virgo-agent-toolkit/luvit-async/zipball/master",
-    ["options"] = "https://github.com/radare/luvit-options/zipball/master",
+    "luvit/luvit@1.9.4",
+    "rphillips/async@0.0.2",
   },
+  files = {
+    "**.lua",
+    "!lit*",
+    "!test*"
+  }
 }

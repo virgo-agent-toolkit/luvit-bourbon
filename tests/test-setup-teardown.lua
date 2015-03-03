@@ -15,16 +15,17 @@ limitations under the License.
 --]]
 
 local table = require('table')
+local bourbon = require('../init')
 
 local call_order = {}
 
 local under_test = {}
-under_test['setup'] = function(test, asserts)
+under_test['setup'] = function(test)
   table.insert(call_order, 'setup')
   test.done()
 end
 
-under_test['teardown'] = function(test, asserts)
+under_test['teardown'] = function(test)
   table.insert(call_order, 'teardown')
   test.done()
 end
@@ -32,23 +33,23 @@ end
 local exports = {}
 
 exports['test_setup_teardown'] = function(test, asserts)
-  local bourbon = require('./init.lua')
   local options = {
     print_summary = false,
     verbose = false,
   }
-  bourbon.run(options, under_test, function(err, stats)
+  bourbon.run(options, under_test, function(err)
+    assert(not err)
     asserts.equals(call_order[1], 'setup')
     asserts.equals(call_order[2], 'teardown')
     test.done()
   end)
 end
 
-exports['test_skipit'] = function(test, asserts)
+exports['test_skipit'] = function(test)
   test.skip()
 end
 
-exports['test_skipit_with_reason'] = function(test, asserts)
+exports['test_skipit_with_reason'] = function(test)
   test.skip("Is there a reason?")
 end
 

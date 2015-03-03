@@ -14,16 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 --]]
 
-local async = require 'async'
-local table = require 'table'
-local string = require 'string'
-local math = require 'math'
+local async = require('async')
+local table = require('table')
+local string = require('string')
 
 local fmt = string.format
 
 local context = require './context'
 
-function is_test_key(k)
+local function is_test_key(k)
   return type(k) == "string" and k:match("_*test.*")
 end
 
@@ -72,20 +71,20 @@ end
 
 
 local run_test = function(runner, stats, callback)
-  process.stdout:write(fmt("  Running %s", runner.name))
+  print(fmt("  Running %s", runner.name))
   local test_baton = TestBaton.new(runner, stats, function(err, skipped, skipReason)
     if skipped then
       if skipReason ~= nil then
-        process.stdout:write(" SKIPPED (" .. skipReason .. ")\n")
+        print(" SKIPPED (" .. skipReason .. ")\n")
       else
-        process.stdout:write(" SKIPPED\n")
+        print(" SKIPPED\n")
       end
     else
-      process.stdout:write(" DONE\n")
+      print(" DONE\n")
     end
 
     runner.context:dump_errors(function(line)
-      process.stdout:write(line)
+      print(line)
     end)
 
     callback(err)
@@ -158,13 +157,13 @@ local run = function(options, mods, callback)
     end
   end, function(err)
     if err then
-      process.stdout:write(err .. '\n')
+      print(err .. '\n')
       return
     end
     if options.print_summary then
-      process.stdout:write('\nTotals' .. '\n')
+      print('\nTotals' .. '\n')
       stats:print_summary()
-      process.stdout:write('---------------------------------------')
+      print('---------------------------------------')
     end
 
     if callback then callback(nil, stats) end

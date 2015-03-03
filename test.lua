@@ -12,18 +12,18 @@ local TEST_PATH = './tests'
 
 local function runit(filename, callback)
   local modname = './' .. Path.join(TEST_PATH, filename)
-  process.stdout:write(fmt('Executing test module [%s]\n\n', modname))
-  bourbon.run(nil, require(modname), function(err)
-    process.stdout:write('\n')
+  print(fmt('Executing test module [%s]\n\n', modname))
+  bourbon.run(nil, require(modname), function()
+    print('\n')
     callback()
   end)
 end
 
 fs.readdir(TEST_PATH, function(err, files)
   assert(err == nil)
-  test_files = {}
+  local test_files = {}
 
-  for i, v in ipairs(files) do
+  for _, v in ipairs(files) do
     local _, _, ext = string.find(v, '^test-.*%.(.*)')
     if ext == 'lua' then
       table.insert(test_files, v)

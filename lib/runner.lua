@@ -20,26 +20,24 @@ local async = require('async')
 
 local run = require('./run')
 
-local exports = {}
-
-function runTestFile(filePath, callback)
+local function runTestFile(filePath, callback)
   print(filePath)
   local status, mod = pcall(require, filePath)
 
   if status ~= true then
-    process.stdout:write(fmt('Error loading test module [%s]: %s\n\n', filePath, mod))
-    callback(err)
+    print(fmt('Error loading test module [%s]: %s\n\n', filePath, mod))
+    callback()
     return
   end
 
-  process.stdout:write(fmt('Executing test module [%s]\n\n', filePath))
+  print(fmt('Executing test module [%s]\n\n', filePath))
   run(nil, mod, function(err, stats)
-    process.stdout:write('\n')
+    print('\n')
     callback(err, stats)
   end)
 end
 
-function runTestFiles(testFiles, options, callback)
+local function runTestFiles(testFiles, options, callback)
   local failed = 0
 
   async.forEachSeries(testFiles, function(testFile, callback)
@@ -69,4 +67,3 @@ end
 
 exports.runTestFile = runTestFile
 exports.runTestFiles = runTestFiles
-return exports

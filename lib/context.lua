@@ -46,7 +46,7 @@ function Context:run(func, test)
   asserts.assert = bourbon_assert
 
   setfenv(func, newgt)
-  ok, ret_or_err = pcall(func, test, asserts)
+  local _, ret_or_err = pcall(func, test, asserts)
 
   -- if test threw an exception without catching it we end up here
   if ret_or_err then
