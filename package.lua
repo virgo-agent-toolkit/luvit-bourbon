@@ -1,6 +1,6 @@
 return {
   name = "virgo-agent-toolkit/bourbon",
-  version = "0.2.0",
+  version = "0.2.1",
   description = "test library",
   author = "Ryan Phillips <ryan.phillips@rackspace.com>",
   contributors = {
